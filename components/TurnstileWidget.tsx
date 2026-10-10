@@ -38,7 +38,7 @@ export function TurnstileWidget({ onVerify }: { onVerify: (token: string | null)
     rendered.current = true;
     window.turnstile.render(containerRef.current, {
       sitekey: siteKey,
-      theme: "dark",
+      theme: "auto",
       callback: (token) => onVerifyRef.current(token),
       "error-callback": () => onVerifyRef.current(null),
       "expired-callback": () => onVerifyRef.current(null),
@@ -46,6 +46,9 @@ export function TurnstileWidget({ onVerify }: { onVerify: (token: string | null)
   }, [scriptLoaded, siteKey]);
 
   if (!siteKey) {
+    // Production never gets here: the submit page closes the form until the
+    // portal is configured (lib/ideasPortal.ts). This note is for local dev.
+    if (process.env.NODE_ENV === "production") return null;
     return (
       <p className="rounded-md border border-dashed border-border p-3 text-xs text-muted">
         Turnstile isn&apos;t configured yet (missing NEXT_PUBLIC_TURNSTILE_SITE_KEY) — the server
