@@ -31,6 +31,20 @@ a single-admin CMS (project CRUD, idea moderation, site content editor).
 public route and the admin login gate were smoke-tested in a browser against
 local fixture data (`lib/data/fixtures.ts`) — see "Tested" below.
 
+## Deployed (2026-10-10)
+
+- Live: https://dalitsomalama-dev.vercel.app (Vercel project `dalitsomalama-dev`,
+  auto-deploys from `main`). Supabase project ref `flqpqqjmifhbcwxuaeom`
+  (eu-west-1); schema + seed run via the SQL editor; env vars synced by the
+  Supabase ⇄ Vercel integration (Production). Auth Site URL set to the live URL.
+- Turnstile widget (Managed, hostname dalitsomalama-dev.vercel.app) +
+  `SESSION_HASH_SALT` added; ideas portal open, server rejects tokenless posts (403).
+- Fixed on the way: env-name aliases (`lib/supabase/env.ts`), cookie-free
+  public reads so `generateStaticParams` builds (`createPublicSupabaseClient`),
+  ideas portal closes politely when unconfigured (`lib/ideasPortal.ts`).
+- Still to do: create the admin user in Supabase Auth; a real submission +
+  moderation run-through; custom domain if `dalitsomalama.dev` is bought.
+
 ## Nav + contact options (2026-10-10)
 
 - Nav: Home added; "CV" renamed Portfolio and moved to `/portfolio`
