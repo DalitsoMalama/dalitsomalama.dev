@@ -16,7 +16,7 @@ export default async function AdminPage() {
           {!isSupabaseConfigured() && (
             <p className="mt-2 max-w-sm text-sm text-muted">
               Supabase isn&apos;t configured yet — set NEXT_PUBLIC_SUPABASE_URL and
-              NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local to enable admin sign-in.
+              NEXT_PUBLIC_SUPABASE_ANON_KEY (or …_PUBLISHABLE_KEY) in .env.local to enable admin sign-in.
             </p>
           )}
         </div>

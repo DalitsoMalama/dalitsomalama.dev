@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
+import { supabasePublicKey, supabaseUrl } from "@/lib/supabase/env";
 
 // Next.js 16 renamed middleware.ts -> proxy.ts (exported `proxy` function).
 // Guards the admin sub-pages that assume an authenticated session; the
@@ -14,8 +15,8 @@ export async function proxy(request: NextRequest) {
   }
 
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl!,
+    supabasePublicKey!,
     {
       cookies: {
         getAll() {

@@ -1,3 +1,5 @@
+import { supabasePublicKey, supabaseUrl } from "@/lib/supabase/env";
+
 /**
  * Whether the public ideas portal can accept submissions and votes.
  *
@@ -10,8 +12,6 @@
 export function ideasPortalOpen(): boolean {
   if (process.env.NODE_ENV !== "production") return true;
   return Boolean(
-    process.env.NEXT_PUBLIC_SUPABASE_URL &&
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY &&
-      process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
+    supabaseUrl && supabasePublicKey && process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
   );
 }

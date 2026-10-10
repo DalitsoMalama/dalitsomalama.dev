@@ -2,6 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { isSupabaseConfigured } from "./client";
+import { supabasePublicKey, supabaseSecretKey, supabaseUrl } from "./env";
 
 export { isSupabaseConfigured };
 
@@ -10,8 +11,8 @@ export async function createServerSupabaseClient() {
   const cookieStore = await cookies();
 
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl!,
+    supabasePublicKey!,
     {
       cookies: {
         getAll() {
@@ -37,12 +38,13 @@ export async function createServerSupabaseClient() {
  * Used for admin writes (after session verification) and rate-limit bookkeeping.
  */
 export function createServiceRoleClient() {
-  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
-    throw new Error("SUPABASE_SERVICE_ROLE_KEY is not set");
+  const secretKey = supabaseSecretKey();
+  if (!secretKey) {
+    throw new Error("SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_SECRET_KEY) is not set");
   }
   return createSupabaseClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY,
+    supabaseUrl!,
+    secretKey,
     { auth: { autoRefreshToken: false, persistSession: false } },
   );
 }
