@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
@@ -49,10 +50,20 @@ export function Nav() {
       }`}
     >
       <nav aria-label="Primary" className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-        <Link href="/" className="group font-mono text-sm font-medium tracking-tight">
-          dalitsomalama
-          <span className="inline-block text-accent transition-transform duration-300 group-hover:-translate-y-0.5">.</span>
-          dev
+        <Link href="/" className="group flex items-center gap-2.5 font-mono text-sm font-medium tracking-tight">
+          <Image
+            src="/logo.png"
+            alt=""
+            width={111}
+            height={96}
+            preload
+            className="h-7 w-auto transition-transform duration-300 group-hover:-rotate-3 group-hover:scale-105"
+          />
+          <span>
+            dalitsomalama
+            <span className="inline-block text-accent transition-transform duration-300 group-hover:-translate-y-0.5">.</span>
+            dev
+          </span>
         </Link>
 
         <div className="flex items-center gap-2 sm:gap-4">
