@@ -1,22 +1,26 @@
 "use client";
 
 import { useState } from "react";
-import type { CvEntry } from "@/lib/types";
+import type { SiteContent } from "@/lib/types";
 
-export function ContentEditor({
-  manifesto: initialManifesto,
-  about: initialAbout,
-  cvEntries: initialCvEntries,
-}: {
-  manifesto: string;
-  about: string;
-  cvEntries: CvEntry[];
-}) {
+export function ContentEditor({ content }: { content: SiteContent }) {
   return (
     <div className="flex flex-col gap-10">
-      <TextField contentKey="manifesto" label="Home page manifesto" initialValue={initialManifesto} />
-      <TextField contentKey="about" label="About page bio" initialValue={initialAbout} />
-      <JsonField contentKey="cv_entries" label="CV timeline entries (JSON array)" initialValue={initialCvEntries} />
+      <JsonField
+        contentKey="profile"
+        label="Profile — name, headline, contact links, home page highlights (JSON)"
+        initialValue={content.profile}
+      />
+      <TextField contentKey="manifesto" label="Home page manifesto" initialValue={content.manifesto} />
+      <TextField contentKey="about" label="About page bio" initialValue={content.about} />
+      <JsonField contentKey="cv_entries" label="CV timeline entries (JSON array)" initialValue={content.cv_entries} />
+      <JsonField contentKey="skills" label="CV skills, grouped (JSON array)" initialValue={content.skills} />
+      <JsonField contentKey="education" label="CV education (JSON array)" initialValue={content.education} />
+      <JsonField
+        contentKey="certifications"
+        label="CV certifications (JSON array)"
+        initialValue={content.certifications}
+      />
     </div>
   );
 }

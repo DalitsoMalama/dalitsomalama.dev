@@ -42,7 +42,7 @@ export function AdminIdeaRow({ idea }: { idea: Idea }) {
           <h3 className="font-medium">{idea.title}</h3>
           <StatusBadge status={idea.status} />
           {!idea.approved && (
-            <span className="rounded-full bg-amber-400/15 px-2.5 py-0.5 text-xs font-medium text-amber-300">
+            <span className="rounded-full bg-warning/15 px-2.5 py-0.5 text-xs font-medium text-warning">
               Pending approval
             </span>
           )}

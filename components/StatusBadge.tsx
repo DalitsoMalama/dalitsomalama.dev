@@ -10,9 +10,9 @@ const STATUS_LABELS: Record<IdeaStatus, string> = {
 
 const STATUS_STYLES: Record<IdeaStatus, string> = {
   submitted: "bg-surface-hover text-muted",
-  under_review: "bg-amber-400/15 text-amber-300",
+  under_review: "bg-warning/15 text-warning",
   in_the_lab: "bg-accent/15 text-accent",
-  shipped: "bg-emerald-500/20 text-emerald-300",
+  shipped: "bg-success/15 text-success",
   declined: "bg-danger/15 text-danger",
 };
 

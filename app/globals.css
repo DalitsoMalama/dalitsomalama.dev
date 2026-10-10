@@ -1,15 +1,43 @@
 @import "tailwindcss";
 
+/* Theme: every token is light-dark(light, dark), resolved by color-scheme.
+   With no choice saved the page follows the system; the nav toggle sets
+   data-theme on <html> (see ThemeToggle and the script in app/layout.tsx). */
 :root {
-  --background: #0a0a0b;
-  --surface: #131315;
-  --surface-hover: #1b1b1e;
-  --border: #2a2a2e;
-  --foreground: #f4f4f5;
-  --muted: #a1a1aa;
-  --accent: #34d399;
-  --accent-foreground: #04120a;
-  --danger: #f87171;
+  color-scheme: light dark;
+
+  --background: light-dark(#fafafa, #0a0a0b);
+  --surface: light-dark(#ffffff, #131315);
+  --surface-hover: light-dark(#f2f2f4, #1b1b1e);
+  --border: light-dark(#e4e4e7, #2a2a2e);
+  --foreground: light-dark(#18181b, #f4f4f5);
+  --muted: light-dark(#5f5f68, #a1a1aa);
+  --accent: light-dark(#047857, #34d399);
+  --accent-foreground: light-dark(#ffffff, #04120a);
+  --danger: light-dark(#dc2626, #f87171);
+  --warning: light-dark(#b45309, #fcd34d);
+  --success: light-dark(#15803d, #6ee7b7);
+  --water: light-dark(#0284c7, #38bdf8);
+  /* faint structure lines (backdrop grid) and the cursor glow */
+  --grid-line: light-dark(rgb(24 24 27 / 0.055), rgb(244 244 245 / 0.045));
+  --glow: light-dark(rgb(4 120 87 / 0.10), rgb(52 211 153 / 0.10));
+
+  /* hairline figures (@lucasmarkes/hairline). Plate = the colour a figure
+     sits on; containers on another surface override it. The accent is the
+     one bright stroke, so the figures share the site's single highlight. */
+  --hairline-plate: var(--background);
+  --hairline-hi: var(--accent);
+  --hairline-edge: light-dark(#a4a4ac, #a1a1aa);
+  --hairline-mid: light-dark(#c3c3c9, #52525b);
+  --hairline-lo: light-dark(#e0e0e4, #2a2a2e);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -22,8 +50,23 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-danger: var(--danger);
+  --color-warning: var(--warning);
+  --color-success: var(--success);
+  --color-water: var(--water);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-instrument-serif);
+
+  --animate-marquee: marquee var(--marquee-duration, 40s) linear infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
 }
 
 * {
@@ -31,12 +74,104 @@
 }
 
 html {
-  color-scheme: dark;
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+  font-feature-settings: "ss01", "cv11";
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+/* Big headlines: tight tracking, balanced lines. The <em> inside becomes the
+   italic serif accent, the site's one typographic flourish. */
+.display {
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+.display em,
+.serif-accent {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+@keyframes scrollcue {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(300%);
+  }
+}
+
+/* Water-quality simulation (components/demos/WaterQuality.tsx) */
+@keyframes wq-wave {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-120px);
+  }
+}
+
+@keyframes wq-drift {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(7px, -9px);
+  }
+}
+
+/* A dash travelling along a path drawn with pathLength="100". */
+@keyframes wq-pulse {
+  from {
+    stroke-dashoffset: 8;
+  }
+  to {
+    stroke-dashoffset: -100;
+  }
+}
+
+@keyframes wq-blink {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.15;
+  }
+}
+
+@keyframes wq-ripple {
+  0% {
+    opacity: 0.9;
+    transform: scale(0.6);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.4);
+  }
+}
+
+/* Small uppercase mono labels above sections. */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
 a,

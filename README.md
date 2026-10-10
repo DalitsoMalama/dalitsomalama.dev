@@ -1,4 +1,4 @@
-# Epy's Developer Showcase Site
+# dalitsomalama.dev — Mwenya Dalitso Malama's showcase site
 
 Next.js 16 (App Router, TypeScript) + Supabase site: a "Systems Lab" project
 showcase with video case studies, a public Ideas portal (submit/upvote/moderate),

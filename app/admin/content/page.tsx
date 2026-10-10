@@ -1,12 +1,25 @@
 import { ContentEditor } from "@/components/admin/ContentEditor";
-import { getAboutText, getCvEntries, getManifesto } from "@/lib/data/content";
+import {
+  getAboutText,
+  getCertifications,
+  getCvEntries,
+  getEducation,
+  getManifesto,
+  getProfile,
+  getSkills,
+} from "@/lib/data/content";
 
 export default async function AdminContentPage() {
-  const [manifesto, about, cvEntries] = await Promise.all([
-    getManifesto(),
-    getAboutText(),
-    getCvEntries(),
-  ]);
+  const [manifesto, about, cvEntries, profile, skills, education, certifications] =
+    await Promise.all([
+      getManifesto(),
+      getAboutText(),
+      getCvEntries(),
+      getProfile(),
+      getSkills(),
+      getEducation(),
+      getCertifications(),
+    ]);
 
   return (
     <div>
@@ -15,7 +28,9 @@ export default async function AdminContentPage() {
         Edits here go live on the next page revalidation — no redeploy needed.
       </p>
       <div className="mt-6">
-        <ContentEditor manifesto={manifesto} about={about} cvEntries={cvEntries} />
+        <ContentEditor
+          content={{ manifesto, about, cv_entries: cvEntries, profile, skills, education, certifications }}
+        />
       </div>
     </div>
   );

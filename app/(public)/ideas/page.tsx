@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { MotionReveal } from "@/components/MotionReveal";
+import { Figure } from "@/components/Figure";
 import { IdeaCard } from "@/components/IdeaCard";
 import { getApprovedIdeas, type IdeaSort } from "@/lib/data/ideas";
 
@@ -18,22 +19,32 @@ export default async function IdeasPage({
   const ideas = await getApprovedIdeas(sort);
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-16">
+    <div className="mx-auto max-w-3xl px-6 pb-16 pt-20">
       <MotionReveal>
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-medium">Ideas</h1>
-            <p className="mt-2 max-w-xl text-muted">
-              Got something you wish existed? Submit it — approved ideas show up here for
-              everyone to upvote.
+        <div className="flex flex-col-reverse gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="max-w-md">
+            <p className="eyebrow">Ideas portal</p>
+            <h1 className="display mt-5 text-[clamp(2.5rem,6vw,4rem)]">
+              What should I <em>automate next?</em>
+            </h1>
+            <p className="mt-4 max-w-xl text-pretty text-muted">
+              Still doing something by hand in Excel, on paper or over email? Describe it here.
+              Approved ideas show up for everyone to upvote, and the best ones get built.
             </p>
+            <Link
+              href="/ideas/submit"
+              className="mt-6 inline-flex items-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-accent-foreground transition-transform hover:scale-[1.03] active:scale-95"
+            >
+              Submit an idea
+            </Link>
           </div>
-          <Link
-            href="/ideas/submit"
-            className="rounded-md bg-accent px-4 py-2 text-sm font-medium text-accent-foreground hover:opacity-90"
-          >
-            Submit an idea
-          </Link>
+          <div className="w-48 shrink-0 self-center sm:w-60">
+            <Figure
+              name="format"
+              play
+              label="A file of crooked lines; as the pointer runs down it, every line above snaps square — a messy manual process, made orderly."
+            />
+          </div>
         </div>
 
         <div className="mt-6 flex gap-2 text-sm">

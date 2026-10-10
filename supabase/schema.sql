@@ -1,4 +1,4 @@
--- Epy's Developer Showcase Site — schema + RLS policies
+-- Dalitso Malama's showcase site — schema + RLS policies
 -- Run this once against a fresh Supabase project (SQL Editor or `supabase db push`).
 --
 -- Security model: this app has exactly one admin, created manually in the
@@ -18,15 +18,32 @@ create table if not exists projects (
   problem text,
   solution text,
   outcome text, -- delta from ARCHITECTURE.md §4: FR-6/acceptance criteria require a distinct outcome/impact section
+  -- delta: organization/period/note/gallery_images. Case studies are employer
+  -- systems that need "who / when" context, several (redacted) screenshots,
+  -- and a note on what's blurred — none of which fit in the original columns.
+  organization text,
+  period text,
+  note text,
   tech_stack text[] not null default '{}',
   video_youtube_id text,
-  cover_image_url text,
+  cover_image_url text, -- absolute URL or a root-relative /public path
+  gallery_images text[] not null default '{}',
+  figure text, -- delta: a hairline figure name (lib/figures.ts), the cover when there is no image
+  demo text, -- delta: an interactive simulation name (lib/demos.ts) embedded in the case study
   featured boolean not null default false,
   published boolean not null default false,
   display_order int not null default 0,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+-- Upgrade path for databases created before the delta columns above existed.
+alter table projects add column if not exists organization text;
+alter table projects add column if not exists period text;
+alter table projects add column if not exists note text;
+alter table projects add column if not exists gallery_images text[] not null default '{}';
+alter table projects add column if not exists figure text;
+alter table projects add column if not exists demo text;
 
 alter table projects enable row level security;
 
@@ -135,7 +152,9 @@ create index if not exists idea_rate_limit_ip_hash_created_at_idx
 
 -- ── site_content ────────────────────────────────────────────────────────────
 -- Small KV store for owner-editable text that doesn't warrant its own table:
--- manifesto (home page), about (bio page), cv_entries (CV timeline, jsonb array).
+-- manifesto (home page), about (bio page), cv_entries (CV timeline, jsonb array),
+-- profile (name/headline/contact/highlights), skills, education, certifications.
+-- Shapes are enforced per key in lib/validation/content.ts.
 create table if not exists site_content (
   key text primary key,
   value jsonb not null,
@@ -154,6 +173,30 @@ create policy "site_content_admin_write"
   to authenticated
   using (auth.role() = 'authenticated')
   with check (auth.role() = 'authenticated');
+
+-- ── storage: project images ─────────────────────────────────────────────
+-- delta: lets the admin upload screenshots/photos from /admin instead of
+-- committing them to /public. Public read (the site shows them); only the
+-- authenticated admin can add or remove. Size and type are enforced by the
+-- bucket as well as by app/api/admin/uploads.
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('project-images', 'project-images', true, 5242880, array['image/jpeg', 'image/png', 'image/webp'])
+on conflict (id) do nothing;
+
+create policy "project_images_public_read"
+  on storage.objects for select
+  to anon, authenticated
+  using (bucket_id = 'project-images');
+
+create policy "project_images_admin_insert"
+  on storage.objects for insert
+  to authenticated
+  with check (bucket_id = 'project-images');
+
+create policy "project_images_admin_delete"
+  on storage.objects for delete
+  to authenticated
+  using (bucket_id = 'project-images');
 
 -- ── updated_at trigger for projects ─────────────────────────────────────────
 create or replace function set_updated_at()

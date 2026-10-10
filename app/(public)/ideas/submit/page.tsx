@@ -10,8 +10,8 @@ export default function SubmitIdeaPage() {
       <MotionReveal>
         <h1 className="text-2xl font-medium">Submit an idea</h1>
         <p className="mt-2 text-muted">
-          Anonymous is fine. Every submission is reviewed before it appears publicly — no spam
-          reaches the feed.
+          Describe the manual process and what a good result would look like. Anonymous is fine.
+          Every submission is reviewed before it appears publicly.
         </p>
       </MotionReveal>
       <div className="mt-8">
