@@ -34,6 +34,19 @@ export async function createServerSupabaseClient() {
 }
 
 /**
+ * Anonymous, cookie-free client for public reads (published projects, site
+ * content, approved ideas). It never touches request cookies, so it works in
+ * generateStaticParams and lets public pages prerender with ISR; RLS still
+ * limits it to what any visitor may see. Use the session client for anything
+ * that depends on who is signed in.
+ */
+export function createPublicSupabaseClient() {
+  return createSupabaseClient(supabaseUrl!, supabasePublicKey!, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  });
+}
+
+/**
  * Bypasses RLS entirely — server-only, never imported into client code.
  * Used for admin writes (after session verification) and rate-limit bookkeeping.
  */

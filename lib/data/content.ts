@@ -1,5 +1,9 @@
 import "server-only";
-import { createServerSupabaseClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import {
+  createPublicSupabaseClient,
+  createServerSupabaseClient,
+  isSupabaseConfigured,
+} from "@/lib/supabase/server";
 import {
   fixtureAbout,
   fixtureCertifications,
@@ -24,7 +28,7 @@ async function getContentValue<K extends keyof SiteContent>(
 ): Promise<SiteContent[K]> {
   if (!isSupabaseConfigured()) return fallback;
 
-  const supabase = await createServerSupabaseClient();
+  const supabase = createPublicSupabaseClient();
   const { data, error } = await supabase
     .from("site_content")
     .select("value")

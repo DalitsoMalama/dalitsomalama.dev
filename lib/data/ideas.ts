@@ -1,5 +1,9 @@
 import "server-only";
-import { createServerSupabaseClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import {
+  createPublicSupabaseClient,
+  createServerSupabaseClient,
+  isSupabaseConfigured,
+} from "@/lib/supabase/server";
 import { fixtureIdeas } from "@/lib/data/fixtures";
 import type { Idea, IdeaStatus } from "@/lib/types";
 
@@ -11,7 +15,7 @@ export async function getApprovedIdeas(sort: IdeaSort = "votes"): Promise<Idea[]
     return sortIdeas(ideas, sort);
   }
 
-  const supabase = await createServerSupabaseClient();
+  const supabase = createPublicSupabaseClient();
   const { data, error } = await supabase
     .from("ideas")
     .select("*")

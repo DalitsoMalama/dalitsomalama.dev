@@ -1,5 +1,9 @@
 import "server-only";
-import { createServerSupabaseClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import {
+  createPublicSupabaseClient,
+  createServerSupabaseClient,
+  isSupabaseConfigured,
+} from "@/lib/supabase/server";
 import { fixtureProjects } from "@/lib/data/fixtures";
 import type { Project } from "@/lib/types";
 
@@ -10,7 +14,7 @@ export async function getPublishedProjects(): Promise<Project[]> {
       .sort((a, b) => a.display_order - b.display_order);
   }
 
-  const supabase = await createServerSupabaseClient();
+  const supabase = createPublicSupabaseClient();
   const { data, error } = await supabase
     .from("projects")
     .select("*")
@@ -31,7 +35,7 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
     return fixtureProjects.find((p) => p.slug === slug && p.published) ?? null;
   }
 
-  const supabase = await createServerSupabaseClient();
+  const supabase = createPublicSupabaseClient();
   const { data, error } = await supabase
     .from("projects")
     .select("*")
